@@ -7,21 +7,9 @@ const starlingApiWrapper = require('./starling-api-wrapper');
 
 const starlingClient = new Starling({apiUrl: config.sandboxApi});
 
-const bcid = "1652ea50-f1e5-4f33-8964-827304b85cb8";
-const bat = "co05hG6yZdFmYvowhGXmKdq5d617SvX8JqZrv7q9fWoJMU3sWgyMM3ntNsvL20Yo";
-const brt = "gc3EVfBt7VJ0rqjMnVAnCLteLLFWcRcXPmfA0TAc9hyBWkN4sofVG8YU1uF2yFW6";
-const baid = "";
-
-const lcid = "4a6f8645-842f-4e43-b660-ea0ef75b86ca";
-const lat = "1WP8aCSX6nWsyTNTz9JCqDz7RuZMp6cE96X3r015lzq2caB3pbuS93m6xTNFydX8";
-const lrt = "izpornLFpq436qanJUrK1fXZW7Kqhx9iN0kJYXh29t6MGzFkzFBEPUyFd2TvUzMt";
-const laid = "";
-
-
-const scid = "b4dff24e-fe2c-49cd-a11d-6f552c308538";
-const sat = "qEE1x6k1TP1xtRKYdRykobkrumsY0xM83xpVMPUdxwYqBj9kcvlta18cjbyaokmw";
-const srt = "iqWZTiV0nULwF41Kbw9sS5YtMnPmwYVfhDTLa1zD9xwa6lrLTnoMorJimeAta70a";
-const said = "";
+const bat = "lEopA69vWM7ssG919Urm10A9lsJs3WwmbuM8A2wNPEmv73rxMkluGDUPMABkBfkv";
+const lat = "9pKozZLPYdg6PKu0oZRJm8XLFj5sFJScCc57zY01kCSBNwNtWpWgoT30iCxzw2vX";
+const sat = "VbqqwTokzpsyC61f4cN4VsUL28aTcw4SJzGF35NxhSw4A7NENziot48DxPqqiUuo";
 
 const RATE = 3.29;
 const FEE = 0;
@@ -29,6 +17,19 @@ global.potSize = 0;
 global.potBalance = 0;
 global.loans = [];
 global.loanSize=0;
+
+const init = (req, res) => {
+  var promise = starlingClient.getBalance(sat);
+  return promise.then(function(value) {
+    var balance = _.get(value, "data", []);
+    global.potSize = balance.clearedBalance;
+    global.potBalance = balance.clearedBalance;
+    res.json({success: true, slice : global.potSize });
+  }).catch((e) => {
+    debug('Error getting result', e);
+    return null;
+  });
+};
 
 const getLendings = (req, res) => {
   var loans = [];
@@ -94,7 +95,7 @@ const addToPot = (req, res) => {
   promise.then(function(balanceResponse) {
         var balance = _.get(balanceResponse, "data", []);
         if(req.query.amount<balance.clearedBalance){
-          starlingClient.makeLocalPayment(lat, "378a02fd-af23-4b91-a281-3518996aadb0", "Slice", req.query.amount)
+          starlingClient.makeLocalPayment(lat, "929500c6-64de-4193-8b17-2c03946fc1cd", "Slice", req.query.amount)
           .then(function (paymentResponse){
             debug(paymentResponse);
             global.potSize= (global.potSize -0)+ (req.query.amount-0);
@@ -140,7 +141,7 @@ const borrow = (req, res) => {
   promise.then(function(balanceResponse) {
         var balance = _.get(balanceResponse, "data", []);
         if(req.query.amount<balance.clearedBalance){
-          starlingClient.makeLocalPayment(sat, "0ffb792a-acd9-47ec-ac64-cbdcd8a3cf83", "Slice Loan", req.query.amount)
+          starlingClient.makeLocalPayment(sat, "b3a18bf3-4834-48ca-812f-2183f0436890", "Slice Loan", req.query.amount)
           .then(function (paymentResponse){
             debug(paymentResponse);
             global.potBalance= global.potBalance - req.query.amount;
@@ -163,11 +164,11 @@ const borrow = (req, res) => {
 
 const start = (app) => {
   debug('Starting slice app...');
-
+  app.get('/api/slice/init', (req, res) => init(req, res) );
   app.get('/api/slice/getLendings', (req, res) => getLendings(req, res) );
   app.get('/api/slice/getLoans', (req, res) => getLoans(req, res) );
   app.get('/api/slice/add', (req, res) => addToPot(req, res) );
   app.get('/api/slice/borrow', (req, res) => borrow(req, res) );
-   app.get('/api/slice/addDummy', (req, res) => addDummy(req, res) );
+  app.get('/api/slice/addDummy', (req, res) => addDummy(req, res) );
 };
 module.exports = { start };

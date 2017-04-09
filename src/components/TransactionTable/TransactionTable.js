@@ -16,7 +16,9 @@ export const transactionsProjection = {
           month: 'numeric',
           year: 'numeric'
         }).split(' ').join('/')}
-      </div> }
+      </div> },
+  share: { label: 'Share', cellStyle: {width: '300px'} },
+
 };
 
 export const transactionsSelection = _.keys(transactionsProjection);
