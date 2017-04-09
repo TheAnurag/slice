@@ -1,0 +1,59 @@
+Slice App: Stephen
+
+Client ID: m8ercGUEV1ZUlf0h1kh3
+Secret: b7ZtXBSo5cxiJX7Y7XDeaXhXFSlSNTEll1EesCRa
+================================================
+Leander
+Customer ID: d0ba2382-16d4-401b-b82b-24d322e31d1f
+accessToken: 9pKozZLPYdg6PKu0oZRJm8XLFj5sFJScCc57zY01kCSBNwNtWpWgoT30iCxzw2vX
+"id": "53753850-21fc-4d92-9837-dd3d2b2cfb0b",
+"name": "d0ba2382-16d4-401b-b82b-24d322e31d1f GBP",
+"number": "07880817",
+"sortCode": "608371",
+"currency": "GBP",
+"iban": "GB27SRLGGB2L60837107880817",
+"bic": "SRLGGB2L",
+"createdAt": "2016-04-09T12:00:00Z"
+---------
+        "id": "929500c6-64de-4193-8b17-2c03946fc1cd",
+        "name": "Slice"
+================================================
+Borrower
+Customer ID: 88740805-06de-40a4-9c7c-d431664d066f
+accessToken: lEopA69vWM7ssG919Urm10A9lsJs3WwmbuM8A2wNPEmv73rxMkluGDUPMABkBfkv
+"id": "eec556c0-aff2-40e2-a57b-80d8f6ee5382",
+"name": "88740805-06de-40a4-9c7c-d431664d066f GBP",
+"number": "18188239",
+"sortCode": "608371",
+"currency": "GBP",
+"iban": "GB05SRLGGB2L60837118188239",
+"bic": "SRLGGB2L",
+"createdAt": "2016-04-09T12:00:00Z"
+-------------
+ "id": "9a334c79-e9cb-49cb-a6b7-d818fc207cad",
+ "name": "Slice"
+
+================================================
+Slice
+e37b279e-76cf-49d1-ab65-0b9f12e44004
+VbqqwTokzpsyC61f4cN4VsUL28aTcw4SJzGF35NxhSw4A7NENziot48DxPqqiUuo
+GbYpeTMnWnVqNWkRqJBNZ8MTMdKCB06CYsuCGmFhmE61yt79ypooPkAMXKcspSNG
+
+"id": "55ce8076-080d-4864-9aed-1c10424c040e",
+"name": "e37b279e-76cf-49d1-ab65-0b9f12e44004 GBP",
+"number": "23341944",
+"sortCode": "608371",
+"currency": "GBP",
+"iban": "GB59SRLGGB2L60837123341944",
+"bic": "SRLGGB2L",
+"createdAt": "2016-04-09T12:00:00Z"
+-------
+        "id": "b3a18bf3-4834-48ca-812f-2183f0436890",
+        "name": "Borrower"
+================================================
+
+Slice Add Contact ==> Borrower 
+Borrower Add Contact==> Slice 
+Lender Add Contact==> Slice 
+
+
