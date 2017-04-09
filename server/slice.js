@@ -38,7 +38,7 @@ const getLendings = (req, res) => {
     var installments = {"09/05/2017": installment, "09/06/2017": installment, "09/07/2017": installment};
     loans[i]={amount: loan.amount, rate: loan.rate, term: loan.term, installments: installments};
   }
-  res.json({success: true, loans: loans});
+  res.json({success: true, potTotal : getPotTotal(), potBalance: getPotBalance(), loans: loans});
 };
 
 const getLoans = (req, res) => {
