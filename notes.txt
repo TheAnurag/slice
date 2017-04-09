@@ -1,0 +1,40 @@
+Add to Pot - account Id  + amount + min_rate + Trust Level
+success, pot balance
+
+get Pot details
+- total amount
+- total landing
+- landings with Payment schedule
+
+Borrow Money - account Id, time-frame, rate
+get Loans
+- Total Loan
+- Remaining loan amount
+- prepayment schedule
+
+
+
+
+put a share button
+
+POT Account
+------------------------
+  "id": "1b2e9d72-4a65-45a4-8649-1c2b18d24e8d",
+  "name": "b4dff24e-fe2c-49cd-a11d-6f552c308538 GBP",
+  "number": "67735955",
+  "sortCode": "608371",
+  "currency": "GBP",
+  "iban": "GB74SRLGGB2L60837167735955",
+  "bic": "SRLGGB2L",
+  "createdAt": "2016-04-08T12:00:00Z"
+------------------------------
+Borrower Account:
+--------------------
+  "id": "b0f516ac-0945-429f-9b75-f31519df1c78",
+  "name": "1652ea50-f1e5-4f33-8964-827304b85cb8 GBP",
+  "number": "62582241",
+  "sortCode": "608371",
+  "currency": "GBP",
+  "iban": "GB69SRLGGB2L60837162582241",
+  "bic": "SRLGGB2L",
+  "createdAt": "2016-04-08T12:00:00Z"
