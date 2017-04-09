@@ -49,18 +49,26 @@ const getLendings = (req, res) => {
     debug('Error getting result', e);
     return null;
   });
-  
 };
 
 const getLoans = (req, res) => {
-  var loans = [];
-  for(var i=0; i<global.loans.length ;i++){
-    var loan = global.loans[i];
-    var installment = loan.amount*(1+loan.rate*loan.term/1200)/loan.term;
-    var installments = {"09/05/2017": installment + FEE, "09/06/2017": installment, "09/07/2017": installment};
-    loans[i]={amount: loan.amount, rate: loan.rate, term: loan.term, installments: installments};
-  }
-  res.json({success: true, loans: loans});
+  var promise = starlingClient.getBalance(bat);
+  return promise.then(function(value) {
+    var balance = _.get(value, "data", []);
+    global.potSize = balance.clearedBalance;
+    global.potBalance = balance.clearedBalance;
+    var loans = [];
+    for(var i=0; i<global.loans.length ;i++){
+      var loan = global.loans[i];
+      var installment = loan.amount*(1+loan.rate*loan.term/1200)/loan.term;
+      var installments = {"09/05/2017": installment+FEE, "09/06/2017": installment, "09/07/2017": installment};
+      loans[i]={amount: loan.amount, rate: loan.rate, term: loan.term, installments: installments};
+    }
+    res.json({success: true, balance: balance.clearedBalance, loans: loans});
+  }).catch((e) => {
+    debug('Error getting result', e);
+    return null;
+  });
 };
 
 const addDummy = (req, res) => {
