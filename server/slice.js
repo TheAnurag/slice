@@ -22,9 +22,42 @@ const scid = "b4dff24e-fe2c-49cd-a11d-6f552c308538";
 const sat = "qEE1x6k1TP1xtRKYdRykobkrumsY0xM83xpVMPUdxwYqBj9kcvlta18cjbyaokmw";
 const srt = "iqWZTiV0nULwF41Kbw9sS5YtMnPmwYVfhDTLa1zD9xwa6lrLTnoMorJimeAta70a";
 const said = "";
-var potSize = 0;
+
 const RATE = 3.29;
 const FEE = 0;
+global.potSize = 0;
+global.potBalance = 0;
+global.loans = [];
+global.loanSize=0;
+
+const getLendings = (req, res) => {
+  var loans = [];
+  for(var i=0; i<global.loans.length ;i++){
+    var loan = global.loans[i];
+    var installment = loan.amount*(1+loan.rate*loan.term/1200)/loan.term;
+    var installments = {"09/05/2017": installment, "09/06/2017": installment, "09/07/2017": installment};
+    loans[i]={amount: loan.amount, rate: loan.rate, term: loan.term, installments: installments};
+  }
+  res.json({success: true, loans: loans});
+};
+
+const getLoans = (req, res) => {
+  var loans = [];
+  for(var i=0; i<global.loans.length ;i++){
+    var loan = global.loans[i];
+    var installment = loan.amount*(1+loan.rate*loan.term/1200)/loan.term;
+    var installments = {"09/05/2017": installment + FEE, "09/06/2017": installment, "09/07/2017": installment};
+    loans[i]={amount: loan.amount, rate: loan.rate, term: loan.term, installments: installments};
+  }
+  res.json({success: true, loans: loans});
+};
+
+const addDummy = (req, res) => {
+  global.loans[global.loanSize] = {amount: 200, rate: RATE, term: 3};
+  global.loanSize+=1;
+  debug(global.loans);
+  res.json({success:true})
+};
 
 const checkBalanceAndAdd = function(promise, req, res, accessToken) {
     return 
@@ -48,11 +81,11 @@ const lenderResponse = function(success, accessToken, req, res) {
 };
 
 const getPotTotal =()=>{
-  return 200;
+  return global.potSize;
 }
 
 const getPotBalance = () =>{
-  return 100;
+  return global.potBalance;
 }
 
 const addToPot = (req, res) => {
@@ -64,6 +97,8 @@ const addToPot = (req, res) => {
           starlingClient.makeLocalPayment(lat, "378a02fd-af23-4b91-a281-3518996aadb0", "Slice", req.query.amount)
           .then(function (paymentResponse){
             debug(paymentResponse);
+            global.potSize= (global.potSize -0)+ (req.query.amount-0);
+            global.potBalance= (global.potBalance -0)+ (req.query.amount-0);
             lenderResponse(true, lat, req, res);
           }).catch((e) => {
               debug('Error making payment', e);
@@ -78,11 +113,7 @@ const addToPot = (req, res) => {
     });
 };
 
-const getLendings = (req, res) => {
-};
 
-const getLoans = (req, res) => {
-};
 
 const borrowResponse = function(accessToken, req, res) {
     var promise = starlingClient.getBalance(accessToken);
@@ -92,7 +123,8 @@ const borrowResponse = function(accessToken, req, res) {
         res.json({ 
           success: true, 
           balance: balance.clearedBalance, 
-          potTotal : 200, potBalance: 100, 
+          potTotal : getPotTotal(), 
+          potBalance: getPotBalance(), 
           rate: RATE,
           installments : {"09/05/2017": installment + FEE, "09/06/2017": installment, "09/07/2017": installment} 
         });
@@ -111,8 +143,10 @@ const borrow = (req, res) => {
           starlingClient.makeLocalPayment(sat, "0ffb792a-acd9-47ec-ac64-cbdcd8a3cf83", "Slice Loan", req.query.amount)
           .then(function (paymentResponse){
             debug(paymentResponse);
-            potSize+= req.query.amount;
+            global.potBalance= global.potBalance - req.query.amount;
             //create standing instructions
+            global.loans[global.loanSize] = {amount: req.query.amount, rate: RATE, term: 3};
+            global.loanSize+=1;
             borrowResponse(sat, req, res);
           }).catch((e) => {
               debug('Error making payment', e);
@@ -134,5 +168,6 @@ const start = (app) => {
   app.get('/api/slice/getLoans', (req, res) => getLoans(req, res) );
   app.get('/api/slice/add', (req, res) => addToPot(req, res) );
   app.get('/api/slice/borrow', (req, res) => borrow(req, res) );
+   app.get('/api/slice/addDummy', (req, res) => addDummy(req, res) );
 };
 module.exports = { start };
